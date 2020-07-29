@@ -1,17 +1,10 @@
-package com.demo.blogging.model;
+package com.demo.blogging.dto;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-
-@Entity
-public class Article extends BaseEntity{
+public class ArticleDto {
 	
-	@Id
-	@GeneratedValue
 	private UUID id;
 	
 	private String title;
@@ -19,6 +12,10 @@ public class Article extends BaseEntity{
 	
 	private String body;
 	
+	private Timestamp createdAt;
+	
+	private Timestamp updatedAt;
+
 	public UUID getId() {
 		return id;
 	}
@@ -51,11 +48,23 @@ public class Article extends BaseEntity{
 		this.body = body;
 	}
 
-	@Override
-	public String toString() {
-		return "Article [id=" + id + ", title=" + title + ", description=" + description + ", body=" + body
-				+ ", getCreatedAt()=" + getCreatedAt() + ", getUpdatedAt()=" + getUpdatedAt() + "]";
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
 
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	
+	
+	
 }
