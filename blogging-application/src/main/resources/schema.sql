@@ -5,6 +5,7 @@ create table article (
 	body VARCHAR(128),
 	createdAt TIMESTAMP,
 	updatedAt TIMESTAMP,
+	tags Array,
 	PRIMARY KEY (id)
         
 );

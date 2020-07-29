@@ -9,6 +9,6 @@ import com.demo.blogging.model.Article;
 
 public interface BlogRepository extends JpaRepository<Article,UUID> {
 	
-	public Optional<Article> findById(UUID id);
+	 Optional<Article> findById(UUID id);
 
 }

@@ -9,6 +9,8 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,6 +27,8 @@ import com.demo.blogging.exception.EntityNotFoundException;
 import com.demo.blogging.model.Article;
 import com.demo.blogging.service.BloggingService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("blogs")
 public class BloggingController {
@@ -36,8 +40,7 @@ public class BloggingController {
 	
 	
 	@PostMapping("/save")
-	public ResponseEntity<Article> createBlog(@RequestBody Article article) {
-		
+	public ResponseEntity<Article> createBlog(@Valid @RequestBody Article article) {
 		Article savedArticle = bloggingService.add(article);
 		log.info(savedArticle.toString());
 		return  new ResponseEntity<>(savedArticle,HttpStatus.CREATED);
@@ -55,9 +58,9 @@ public class BloggingController {
 	}
 	
 	@GetMapping("/all")
-	public ResponseEntity<List<Article>> getBlogs() {
-		
-		return  new ResponseEntity<>(bloggingService.findAll(),HttpStatus.OK);
+	public ResponseEntity<List<Article>> getBlogs(Pageable pageable) {
+		Page page = bloggingService.findAll(pageable);
+		return  new ResponseEntity<>(page.getContent(),HttpStatus.OK);
 	}
 	
 	@PutMapping("/update/{id}")

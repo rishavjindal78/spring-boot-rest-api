@@ -10,6 +10,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.demo.blogging.dto.ArticleDto;
@@ -31,9 +33,8 @@ public class BloggingService {
 		return blogRepository.save(article);
 	}
 	
-	public List<Article> findAll() {
-
-		return blogRepository.findAll();
+	public Page<Article> findAll(Pageable pageable) {
+		return blogRepository.findAll(pageable);
 	}
 
 
