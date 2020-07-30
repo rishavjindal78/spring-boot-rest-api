@@ -1,5 +1,8 @@
 package com.demo.blogging.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,6 +20,10 @@ public class BloggingMapper {
     public ArticleDto convertToDto(Article article) {
     	ArticleDto articleDto = modelMapper.map(article, ArticleDto.class);
         return articleDto;
+    }
+    
+    public List<ArticleDto> convertToDto(List<Article> article) {
+    	return article.stream().map(entity -> convertToDto(entity)).collect(Collectors.toList());
     }
 	
     public Article convertToEntity(ArticleDto articleDto) {

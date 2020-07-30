@@ -49,4 +49,10 @@ public class Article extends BaseEntity{
 	@Column(name = "tags",  columnDefinition = "ARRAY")
 	@Builder.Default
 	private List<String> tags = new ArrayList<>(10);
+	
+	private boolean favorited;
+	
+	private int favoritesCount;
+	
+	private String createdBy;
 }

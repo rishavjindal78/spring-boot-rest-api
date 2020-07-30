@@ -26,35 +26,51 @@ public class BloggingService {
 	BlogRepository blogRepository;
 	
 	
-	private BloggingMapper mapper;
+	private BloggingMapper mapper = new BloggingMapper();
 
-	public Article add(Article article) {
+	public ArticleDto add(Article article) {
 
-		return blogRepository.save(article);
+		return mapper.convertToDto(blogRepository.save(article));
 	}
 	
-	public Page<Article> findAll(Pageable pageable) {
-		return blogRepository.findAll(pageable);
+	public List<ArticleDto> findAll(Pageable pageable) {
+		return mapper.convertToDto(blogRepository.findAll(pageable).getContent());
+	}
+	
+	public List<ArticleDto> findAllByUser(String user, Pageable pageable) {
+		List<Article> artileList = blogRepository.findAllByCreatedBy(user, pageable);
+		return mapper.convertToDto(artileList);
 	}
 
 
+	public Optional<ArticleDto> getArticleDtoById(UUID id) {
+		Optional<ArticleDto> articleDto = Optional.empty();
+		if(blogRepository.findById(id).isPresent()) {
+			articleDto = Optional.of(mapper.convertToDto(blogRepository.findById(id).get()));
+		}
+		return articleDto;
+	}
+	
 	public Optional<Article> getArticleById(UUID id) {
-
 		return blogRepository.findById(id);
 	}
 
-	public void delete(Article article) {
+	public void delete(UUID id) {
 		
-		blogRepository.deleteById(article.getId());
+		blogRepository.deleteById(id);
 	}
 
 	public Article updateBlog(ArticleDto articleDto) {
-		mapper = new BloggingMapper();
 		Article article = blogRepository.findById(articleDto.getId()).get();
 		
 		copyNonNullProperties(articleDto, article);
 		
 		return blogRepository.save(article);
+	}
+	
+	public boolean userCheck(Article article,String createdBy) {
+		
+		return article.getCreatedBy().equalsIgnoreCase(createdBy);
 	}
 	
 	public static void copyNonNullProperties(Object src, Object target) {

@@ -1,6 +1,7 @@
 package com.demo.blogging.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 public class ArticleDto {
@@ -11,6 +12,12 @@ public class ArticleDto {
 	private String description;
 	
 	private String body;
+	
+	private List<String> tags;
+	
+	private boolean favorited;
+	
+	private int favoritesCount;
 	
 	private Timestamp createdAt;
 	
@@ -64,7 +71,29 @@ public class ArticleDto {
 		this.updatedAt = updatedAt;
 	}
 
-	
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+
+	public boolean isFavorited() {
+		return favorited;
+	}
+
+	public void setFavorited(boolean favorited) {
+		this.favorited = favorited;
+	}
+
+	public int getFavoritesCount() {
+		return favoritesCount;
+	}
+
+	public void setFavoritesCount(int favoritesCount) {
+		this.favoritesCount = favoritesCount;
+	}
 	
 	
 }
