@@ -5,11 +5,13 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.demo.blogging.dto.ArticleDto;
 import com.demo.blogging.model.Article;
 import com.demo.blogging.service.BloggingService;
 
+@Component
 public class BloggingMapper {
 	
 	ModelMapper modelMapper = new ModelMapper();

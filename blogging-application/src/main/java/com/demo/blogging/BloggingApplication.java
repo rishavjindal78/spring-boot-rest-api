@@ -18,6 +18,4 @@ public class BloggingApplication {
 	    return new ModelMapper();
 	}
 
-
-
 }

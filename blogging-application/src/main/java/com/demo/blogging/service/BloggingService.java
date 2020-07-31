@@ -10,23 +10,29 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.demo.blogging.dto.ArticleDto;
 import com.demo.blogging.mapper.BloggingMapper;
 import com.demo.blogging.model.Article;
-import com.demo.blogging.repository.BlogRepository;
+import com.demo.blogging.repository.BloggingRepository;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class BloggingService {
 
+	private final BloggingRepository blogRepository;
+	
 	@Autowired
-	BlogRepository blogRepository;
+	BloggingMapper mapper;
 	
-	
-	private BloggingMapper mapper = new BloggingMapper();
+	@Autowired
+	public BloggingService(BloggingRepository blogRepository) {
+		this.blogRepository = blogRepository;
+	}
 
 	public ArticleDto add(Article article) {
 
@@ -55,12 +61,15 @@ public class BloggingService {
 		return blogRepository.findById(id);
 	}
 
-	public void delete(UUID id) {
-		
+	public String delete(UUID id) {
+		log.info("delete request by valid user::",id);
 		blogRepository.deleteById(id);
+		return "success";
 	}
 
 	public Article updateBlog(ArticleDto articleDto) {
+		log.info("update request by valid user::",articleDto.getId());
+
 		Article article = blogRepository.findById(articleDto.getId()).get();
 		
 		copyNonNullProperties(articleDto, article);
@@ -73,11 +82,11 @@ public class BloggingService {
 		return article.getCreatedBy().equalsIgnoreCase(createdBy);
 	}
 	
-	public static void copyNonNullProperties(Object src, Object target) {
+	private static void copyNonNullProperties(Object src, Object target) {
 	    BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
 	}
 	
-	public static String[] getNullPropertyNames (Object source) {
+	private static String[] getNullPropertyNames (Object source) {
 	    final BeanWrapper src = new BeanWrapperImpl(source);
 	    java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
 

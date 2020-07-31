@@ -1,8 +1,5 @@
 package com.demo.blogging.exception;
 
-import java.util.UUID;
-
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

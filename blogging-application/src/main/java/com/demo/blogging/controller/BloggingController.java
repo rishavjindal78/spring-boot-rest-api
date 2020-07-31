@@ -8,8 +8,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springdoc.data.rest.converters.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,21 +25,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.blogging.dto.ArticleDto;
 import com.demo.blogging.exception.EntityNotFoundException;
+import com.demo.blogging.exception.ForbiddenUserAccessException;
 import com.demo.blogging.exception.UserNotFoundException;
 import com.demo.blogging.model.Article;
 import com.demo.blogging.service.BloggingService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("blogs")
+@Slf4j
 public class BloggingController {
-
-	private static Logger log = LoggerFactory.getLogger(BloggingController.class);
 
 	private static final String DELETE_ERROR = "User can only delete articles that they created";
 	private static final String UPDATE_ERROR = "User can only update articles that they created";
 
+	private final BloggingService bloggingService;
+	
 	@Autowired
-	BloggingService bloggingService;
+	public BloggingController(BloggingService bloggingService) {
+		this.bloggingService = bloggingService;
+	}
 
 
 	@PostMapping("/save")
@@ -65,6 +70,7 @@ public class BloggingController {
 	}
 	
 	@GetMapping("/all/{user}")
+	@PageableAsQueryParam
 	public ResponseEntity<List<ArticleDto>> getBlogs(@PathVariable String user,Pageable pageable) {
 		List<ArticleDto> dtoList = bloggingService.findAllByUser(user,pageable);
 		if(dtoList.size()==0) {
@@ -74,6 +80,7 @@ public class BloggingController {
 	}
 
 	@GetMapping("/all")
+	@PageableAsQueryParam
 	public ResponseEntity<List<ArticleDto>> getBlogs(Pageable pageable) {
 		List<ArticleDto> dtoList = bloggingService.findAll(pageable);
 		if(dtoList.size()==0) {
@@ -92,7 +99,7 @@ public class BloggingController {
 		}
 
 		if(!bloggingService.userCheck(articleOptional.get(), createdBy)) {
-			throw new UserNotFoundException(UPDATE_ERROR);
+			throw new ForbiddenUserAccessException(UPDATE_ERROR);
 		}
 
 		log.info("Id isPresent::"+id );
@@ -110,7 +117,7 @@ public class BloggingController {
 				.orElseThrow(() -> new EntityNotFoundException(id.toString()));
 
 		if(!bloggingService.userCheck(article, createdBy)) {
-			throw new UserNotFoundException(DELETE_ERROR);
+			throw new ForbiddenUserAccessException(DELETE_ERROR);
 		}
 		bloggingService.delete(id);
 		Map<String, Boolean> response = new HashMap<>();

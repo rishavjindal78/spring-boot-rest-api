@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.demo.blogging.model.Article;
 
-public interface BlogRepository extends JpaRepository<Article,UUID> {
+public interface BloggingRepository extends JpaRepository<Article,UUID> {
 	
 	 Optional<Article> findById(UUID id);
 	 

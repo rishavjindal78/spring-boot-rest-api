@@ -35,8 +35,11 @@ import lombok.experimental.SuperBuilder;
 		typeClass = ListArrayType.class
 )
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=true)
 public class Article extends BaseEntity{
+
+	private static final long serialVersionUID = -7872951122959236349L;
+
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(
