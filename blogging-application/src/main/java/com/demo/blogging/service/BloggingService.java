@@ -48,6 +48,11 @@ public class BloggingService {
 		return mapper.convertToDto(artileList);
 	}
 
+	
+	public List<ArticleDto> findAllByTag(String tag) {
+		return mapper.convertToDto(blogRepository.findAllByTags(tag));
+		
+	}
 
 	public Optional<ArticleDto> getArticleDtoById(UUID id) {
 		Optional<ArticleDto> articleDto = Optional.empty();

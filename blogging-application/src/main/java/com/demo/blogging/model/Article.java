@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,7 +19,6 @@ import org.hibernate.annotations.TypeDef;
 
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -63,10 +63,8 @@ public class Article extends BaseEntity{
 	@Size(max = 128)
 	private String body;
 
-	@Type(type = "list-array")
-	@Column(name = "tags",  columnDefinition = "ARRAY")
-	@Builder.Default
-	private List<String> tags = new ArrayList<>(10);
+	@ElementCollection
+	private List<String> tags = new ArrayList<>();
 	
 	private boolean favorited;
 	

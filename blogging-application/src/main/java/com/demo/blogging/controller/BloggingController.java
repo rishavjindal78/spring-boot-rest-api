@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.springdoc.data.rest.converters.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -41,7 +40,7 @@ public class BloggingController {
 	private static final String UPDATE_ERROR = "User can only update articles that they created";
 
 	private final BloggingService bloggingService;
-	
+
 	@Autowired
 	public BloggingController(BloggingService bloggingService) {
 		this.bloggingService = bloggingService;
@@ -68,9 +67,19 @@ public class BloggingController {
 		}
 		return  new ResponseEntity<>(articleDto.get(),HttpStatus.OK);
 	}
-	
+
+	@GetMapping("/tags/{tagname}")
+	public ResponseEntity<List<ArticleDto>> getBlogsByTag(@PathVariable String tagname) {
+		System.out.println("Entered into getBlogsByTag************");
+		List<ArticleDto> dtoList = bloggingService.findAllByTag(tagname);
+		if(dtoList.size()==0) {
+			throw new EntityNotFoundException();
+		}
+
+		return  new ResponseEntity<>(dtoList,HttpStatus.OK);	
+	}
+
 	@GetMapping("/all/{user}")
-	@PageableAsQueryParam
 	public ResponseEntity<List<ArticleDto>> getBlogs(@PathVariable String user,Pageable pageable) {
 		List<ArticleDto> dtoList = bloggingService.findAllByUser(user,pageable);
 		if(dtoList.size()==0) {
@@ -80,7 +89,6 @@ public class BloggingController {
 	}
 
 	@GetMapping("/all")
-	@PageableAsQueryParam
 	public ResponseEntity<List<ArticleDto>> getBlogs(Pageable pageable) {
 		List<ArticleDto> dtoList = bloggingService.findAll(pageable);
 		if(dtoList.size()==0) {

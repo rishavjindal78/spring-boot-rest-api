@@ -127,5 +127,6 @@ public class BlogginControllerTest {
 		.andExpect(jsonPath("$.message", is("BloggingNotFoundWithID:: 0e7721ce-b284-49d5-aae3-9d5c7e28475a")))
 		.andExpect(jsonPath("$.details", is("uri=/blogs/0e7721ce-b284-49d5-aae3-9d5c7e28475a")));	
 	}
+	
 
 }
